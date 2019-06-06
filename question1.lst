@@ -1,0 +1,189 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             question1, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000 E28F0054        ADR              r0, UPC     ; getting address o
+                                                            f the UPC code so w
+                                                            e can start reading
+                                                             it
+    4 00000004         
+    5 00000004         
+    6 00000004 E4D01001 
+                       Loop    LDRB             r1, [r0], #1 ;read in the UPC c
+                                                            ode
+    7 00000008 E2411030        SUB              r1, r1, #48 ;Subtract the ASCII
+                                                             padding of numbers
+                                                             away from the read
+                                                             in value to get th
+                                                            e true numerical va
+                                                            lue
+    8 0000000C E3530001        CMP              r3, #1      ;Check to see if we
+                                                             are on a even inde
+                                                            x
+    9 00000010 1A000002        BNE              Odd         ;if we are not then
+                                                             go to the odd summ
+                                                            ation 
+   10 00000014 E0844001        ADD              r4, r4,r1   ;else we add the re
+                                                            ad in number to the
+                                                             even index summati
+                                                            on
+   11 00000018 E3A03000        MOV              r3, #0      ;change the flag so
+                                                             that the next inde
+                                                            x is odd
+   12 0000001C 0A000001        BEQ              Done        ;skip ahead to incr
+                                                            ement the index val
+                                                            ue
+   13 00000020 E0855001 
+                       Odd     ADD              r5, r5,r1   ; add the read in n
+                                                            umber to the odd in
+                                                            dex summation
+   14 00000024 E3A03001        MOV              r3, #1      ;change the flag so
+                                                             that the next inde
+                                                            x is even
+   15 00000028         
+   16 00000028 E2822001 
+                       Done    ADD              r2, r2, #1  ;increment the inde
+                                                            x by 
+   17 0000002C E352000C        CMP              r2, #12     ;make sure the inde
+                                                            x is still within U
+                                                            PC code length -1 
+   18 00000030 1AFFFFF3        BNE              Loop        ;if it is within th
+                                                            e UPC code length l
+                                                            oop back to the top
+                                                            
+   19 00000034         
+   20 00000034 E1A07005        MOV              r7,r5       ;Making a copy of t
+                                                            he riginal value of
+                                                             the odd summation 
+                                                            so we can multiply 
+                                                            by 3 
+   21 00000038 E1A05085        LSL              r5,#1       ;Shifting odd summa
+                                                            tion to multiply by
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                             2
+   22 0000003C E0855007        ADD              r5, r5, r7  ; adding orginal su
+                                                            mmation to multipli
+                                                            ed to act as multip
+                                                            lying by 3
+   23 00000040 E0840005        ADD              r0,r4,r5    ; add the new odd s
+                                                            ummation to the eve
+                                                            n summation
+   24 00000044         
+   25 00000044 E250000A 
+                       Divide  SUBS             r0, r0, #10 ;subtract by 10 so 
+                                                            we can check if the
+                                                             total summation is
+                                                             a mutliple of it 
+   26 00000048 03A00001        MOVEQ            r0, #1      ;if the last operat
+                                                            ion is equal to 0 w
+                                                            e know that it is a
+                                                             mutliple of 10 and
+                                                             we know that there
+                                                             is no error
+   27 0000004C 0A000001        BEQ              Finished    ;so we are done if 
+                                                            that is equal 
+   28 00000050 5AFFFFFB        BPL              Divide      ; if the number is 
+                                                            greater then 0 that
+                                                             means we havent ye
+                                                            t found out if its 
+                                                            a multiple or not. 
+                                                            So keep looping 
+   29 00000054         
+   30 00000054 E3A00002        MOV              r0, #2      ;if we get to here 
+                                                            that means we have 
+                                                            reached a negative 
+                                                            number when sub 10 
+                                                            from the summation,
+                                                             therefore is not a
+                                                             multiple and there
+                                                             exists an error
+   31 00000058         
+   32 00000058 EAFFFFFE 
+                       Finished
+                               B                Finished    ;Program is finishe
+                                                            d.
+   33 0000005C         
+   34 0000005C 30 31 33 
+              38 30 30 
+              31 35 30 
+              37 33 38 UPC     DCB              "013800150738" ;UPC String 
+   35 00000068                 END                          ;By Jakob Wanger, S
+                                                            tudent Number: 2509
+                                                            50022
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\question1.d -o.\q
+uestion1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EV
+AL SETA 1" --list=.\question1.lst question1.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Divide 00000044
+
+Symbol: Divide
+   Definitions
+      At line 25 in file question1.s
+   Uses
+      At line 28 in file question1.s
+Comment: Divide used once
+Done 00000028
+
+Symbol: Done
+   Definitions
+      At line 16 in file question1.s
+   Uses
+      At line 12 in file question1.s
+Comment: Done used once
+Finished 00000058
+
+Symbol: Finished
+   Definitions
+      At line 32 in file question1.s
+   Uses
+      At line 27 in file question1.s
+      At line 32 in file question1.s
+
+Loop 00000004
+
+Symbol: Loop
+   Definitions
+      At line 6 in file question1.s
+   Uses
+      At line 18 in file question1.s
+Comment: Loop used once
+Odd 00000020
+
+Symbol: Odd
+   Definitions
+      At line 13 in file question1.s
+   Uses
+      At line 9 in file question1.s
+Comment: Odd used once
+UPC 0000005C
+
+Symbol: UPC
+   Definitions
+      At line 34 in file question1.s
+   Uses
+      At line 3 in file question1.s
+Comment: UPC used once
+question1 00000000
+
+Symbol: question1
+   Definitions
+      At line 1 in file question1.s
+   Uses
+      None
+Comment: question1 unused
+7 symbols
+338 symbols in table
